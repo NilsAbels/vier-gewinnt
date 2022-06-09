@@ -20,76 +20,44 @@ def Spielzug(spielfeld,spieler,spalte):
     print(spielfeld)
 
 
-def CheckGewinnervert(spieler,spielfeld,spalte,reihe):
+def CheckGewinnervert(spieler, spielfeld, spalte, zeile):
     activeRow = True
     rowcount = 0
     while(activeRow):   #vertikale Überprüfung
-        if(reihe == len(spielfeld) ):    #reihe außerhalb des Spielfelds
+        if(zeile == len(spielfeld)):    #reihe außerhalb des Spielfelds
             return False
-        if spielfeld[reihe][spalte] == spieler:
+        if spielfeld[zeile][spalte] == spieler:
             rowcount += 1
         else:
             activeRow = False
 
         if rowcount >= 4:
             return True
-        reihe += 1
+        zeile += 1
 
-#horizontale Überprüfung klappt noch nicht
-"""
-def CheckGewinnerhorizontal(spieler,spielfeld,reihe):
+
+
+def CheckGewinnerhorizontal(spieler, spielfeld, zeile):
     zaehler = 0
-    for s in range(0,len(spielfeld[reihe])):
+    for s in range(0, len(spielfeld[zeile])):
 
-        if spielfeld[reihe][s] == spieler:
+        if spielfeld[zeile][s] == spieler:
             zaehler += 1
         else:
             zaehler = 0
         if zaehler == 4:
             return True
 
-        return False
-
-def CheckGewinnerhor(spieler,spielfeld,reihe,spalte):
-    activeRow = True
-    links = True
-    constSpalte = spalte
-    rowcount = 0
-
-    while(activeRow):
-
-        if spalte == len(spielfeld[reihe]) and links == False:
-            return False
-        if spalte == -1:
-            links = False
-            spalte = constSpalte + 1
-
-        if links:
-            if spielfeld[reihe][spalte] == spieler:
-                rowcount += 1
-                spalte -= 1
-            else:
-                links = False
-                spalte = constSpalte + 1
-        else:
-
-            if spielfeld[reihe][spalte] == spieler:
-                rowcount += 1
-                spalte += 1
-            else:
-                activeRow = False
-
-        if rowcount >= 4:
-            return True
-    print("hor rowcount")
-    print(rowcount)
     return False
 
 
-"""
+
+def CheckGewinnerhorizontal(spieler,spielfeld,zeile,spalte):
 
 
-spielfeld = numpy.zeros((8,8))  #spieldfeld[reihe][spalte]
+
+
+spielfeld = numpy.zeros((8,8))  #spieldfeld[zeile][spalte]
 spieler = 1
 while(True):
     eingabe = input("Spalte: ")
