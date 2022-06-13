@@ -7,16 +7,18 @@ def Spielzug(spielfeld,spieler,spalte):
     for i in range(0, len(spielfeld)):
         if i == len(spielfeld) - 1:
             spielfeld[i][spalte] = spieler
-            if CheckGewinnervert(spieler, spielfeld, spalte, i) or CheckGewinnerhorizontal(spieler,spielfeld,i) or  CheckGewinnerDiagonal(spieler,spielfeld,i,spalte):
-                print("gewonnen")
+            print(spielfeld)
+            if CheckGewinnervert(spieler, spielfeld, spalte, i) or CheckGewinnerhorizontal(spieler,spielfeld,i) or CheckGewinnerDiagonal(spieler,spielfeld,i,spalte):
+                return True
             break
         elif spielfeld[i+1][spalte] != 0:
             spielfeld[i][spalte] = spieler
+            print(spielfeld)
             if CheckGewinnervert(spieler, spielfeld, spalte, i) or CheckGewinnerhorizontal(spieler,spielfeld,i) or CheckGewinnerDiagonal(spieler,spielfeld,i,spalte):
-                print("gewonnen")
+                return True
             break
 
-    print(spielfeld)
+
 
 
 def CheckGewinnervert(spieler, spielfeld, spalte, zeile):
@@ -24,7 +26,7 @@ def CheckGewinnervert(spieler, spielfeld, spalte, zeile):
     zaehler = 0
 
     for s in range(0,len(spielfeld)):
-        if spielfeld[zeile][s] == spieler:
+        if spielfeld[s][spalte] == spieler:
             zaehler += 1
         else:
             zaehler = 0
@@ -36,19 +38,7 @@ def CheckGewinnervert(spieler, spielfeld, spalte, zeile):
 
 
 
-    activeRow = True
-    rowcount = 0
-    while(activeRow):
-        if(zeile == len(spielfeld)):
-            return False
-        if spielfeld[zeile][spalte] == spieler:
-            rowcount += 1
-        else:
-            activeRow = False
 
-        if rowcount >= 4:
-            return True
-        zeile += 1
 
 
 
@@ -117,10 +107,10 @@ while(True):
     if eingabe == "stop":
         break
     if Spielzug(spielfeld,spieler,int(eingabe)-1):
-        print(spieler , "hat gewonnen")
+        print("Spieler:" , spieler , "hat gewonnen")
         eingabe = input("wollt ihr nochmal spielen? (Y/N)")
         if eingabe == "Y":
-            spielfeld = numpy.zeros(8,8)
+            spielfeld = numpy.zeros((8,8))
         else:
             exit()
 
