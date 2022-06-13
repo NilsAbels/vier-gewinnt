@@ -98,16 +98,27 @@ def CheckGewinnerDiagonal(spieler,spielfeld,zeile,spalte):
 
 
 
-
+eingabe = input("Spieler 1: ")
+spieler1 = eingabe
+eingabe = input("Spieler 2: ")
+spieler2 = eingabe
 spielfeld = numpy.zeros((8,8))  #spieldfeld[zeile][spalte]
 print(spielfeld)
-spieler = 1
+currspieler = 1
 while(True):
-    eingabe = input("Spalte: ")
+    if currspieler == 1:
+            print(spieler1, "ist an der Reihe")
+            eingabe = input("Spalte: ")
+    if currspieler == 2:
+            print(spieler2, "ist an der Reihe")
+            eingabe = input("Spalte: ")
     if eingabe == "stop":
         break
-    if Spielzug(spielfeld,spieler,int(eingabe)-1):
-        print("Spieler:" , spieler , "hat gewonnen")
+    if Spielzug(spielfeld,currspieler,int(eingabe)-1):
+        if currspieler == 1:
+            print(spieler1 , " hat gewonnen")
+        elif currspieler ==2:
+            print(spieler2 , " hat gewonnen")
         eingabe = input("wollt ihr nochmal spielen? (Y/N)")
         if eingabe == "Y":
             spielfeld = numpy.zeros((8,8))
@@ -117,10 +128,10 @@ while(True):
 
     else:
 
-      if spieler == 1:
-        spieler = 2
+      if currspieler == 1:
+        currspieler = 2
       else:
-         spieler = 1
+         currspieler = 1
 
 
 
