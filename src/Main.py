@@ -1,4 +1,14 @@
 import numpy
+import tkinter as tk
+
+
+
+
+def GUI():
+
+    root = tk.Tk()
+    root.mainloop()
+
 
 def Spielzug(spielfeld,spieler,spalte):
 
@@ -105,6 +115,7 @@ spieler2 = eingabe
 spielfeld = numpy.zeros((8,8))  #spieldfeld[zeile][spalte]
 print(spielfeld)
 currspieler = 1
+GUI()
 while(True):
     if currspieler == 1:
             print(spieler1, "ist an der Reihe")
