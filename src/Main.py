@@ -120,7 +120,7 @@ while(True):
         elif currspieler ==2:
             print(spieler2 , " hat gewonnen")
         eingabe = input("wollt ihr nochmal spielen? (Y/N)")
-        if eingabe == "Y":
+        if eingabe == "Y" or "y":
             spielfeld = numpy.zeros((8,8))
         else:
             exit()
