@@ -9,12 +9,15 @@ def Spielzug(spielfeld,spieler,spalte):
     for i in range(0, len(spielfeld)):
         if i == len(spielfeld) - 1:
             spielfeld[i][spalte] = spieler
+
             print(spielfeld)
             if CheckGewinnervert(spieler, spielfeld, spalte, i) or CheckGewinnerhorizontal(spieler,spielfeld,i) or CheckGewinnerDiagonal(spieler,spielfeld,i,spalte):
                 return True
             break
         elif spielfeld[i+1][spalte] != 0:
             spielfeld[i][spalte] = spieler
+
+
             print(spielfeld)
             if CheckGewinnervert(spieler, spielfeld, spalte, i) or CheckGewinnerhorizontal(spieler,spielfeld,i) or CheckGewinnerDiagonal(spieler,spielfeld,i,spalte):
                 return True
@@ -107,7 +110,8 @@ spieler2 = eingabe
 spielfeld = numpy.zeros((8,8))  #spieldfeld[zeile][spalte]
 print(spielfeld)
 currspieler = 1
-GUI.Grid()
+GUI.grid()
+print("tegirejgregjeirgjoerjgr")
 while(True):
     if currspieler == 1:
             print(spieler1, "ist an der Reihe")

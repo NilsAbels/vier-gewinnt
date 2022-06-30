@@ -9,18 +9,13 @@ def create_circle(x, y, r,canvasName): #center coordinates, radius
 
 
 
+def spielzug(event):
+    cv.itemconfig(event.num, fill='black')
 
-def Grid():
 
 
+def grid():
 
-    root = tk.Tk()
-
-    root.title("4 gewinnt")
-    root.geometry("400x400")
-    cv = tk.Canvas(root)
-    cv.pack()
-    allovals = [[0 for x in range(8)] for y in range(8)]
     x = 10
     y = 10
     for i in range(8):
@@ -28,8 +23,18 @@ def Grid():
         x = 10
         for j in range(8):
             x = x + 25
-            allovals[i][j] = create_circle(x, y, 10, cv)
-    cv.itemconfig(allovals[0][0], fill='black')
-    print(allovals)
+            spielfeldUI[i][j] = create_circle(x, y, 10, cv)
+            cv.tag_bind(spielfeldUI[i][j], '<ButtonPress-1>', spielzug)
+
+
 
     root.mainloop()
+
+
+
+root = tk.Tk()
+root.title("4 gewinnt")
+root.geometry("400x400")
+spielfeldUI = [[0 for x in range(8)] for y in range(8)]
+cv = tk.Canvas(root)
+cv.pack()
