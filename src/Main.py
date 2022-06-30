@@ -1,32 +1,6 @@
 import numpy
-import tkinter as tk
+import GUI
 
-
-def create_circle(x, y, r,canvasName): #center coordinates, radius
-    x0 = x - r
-    y0 = y - r
-    x1 = x + r
-    y1 = y + r
-    return canvasName.create_oval(x0, y0, x1, y1)
-
-
-def GUI():
-
-    root = tk.Tk()
-
-    root.title("4 gewinnt")
-    root.geometry("400x400")
-    cv = tk.Canvas(root)
-    cv.pack()
-    x = 10
-    y = 10
-    for i in range(8):
-        y = y + 25
-        x = 10
-        for j in range(8):
-            x = x + 25
-            create_circle(x,y,10,cv)
-    root.mainloop()
 
 def Spielzug(spielfeld,spieler,spalte):
 
@@ -133,7 +107,7 @@ spieler2 = eingabe
 spielfeld = numpy.zeros((8,8))  #spieldfeld[zeile][spalte]
 print(spielfeld)
 currspieler = 1
-GUI()
+GUI.Grid()
 while(True):
     if currspieler == 1:
             print(spieler1, "ist an der Reihe")
