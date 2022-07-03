@@ -100,7 +100,7 @@ spielfeld = numpy.zeros((8,8))  #Spielfeld[zeile][spalte]
 print(spielfeld)
 currspieler = 1
 
-GUI.grid()
+#GUI.grid()
 
 while(True):
     
@@ -113,7 +113,7 @@ while(True):
     if eingabe == "stop":
         break
 
-    if re.findall(r'[1-8]',eingabe): # 
+    if re.findall(r'[1-8]',eingabe): #RegEx Überprüfung, ob Eingabe zwischen 1 und 8. Wenn nicht, erneute Abfrage
         pass
     else:
         continue
