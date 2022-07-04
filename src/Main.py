@@ -4,7 +4,7 @@ import re
 
 def Spielzug(spielfeld,spieler,spalte):
 
-    if spielfeld[0][spalte] != 0: #???
+    if spielfeld[0][spalte] != 0: #falls Spalte bereits gefüllt ist
         print("zug nicht möglich")
 
     for i in range(0, len(spielfeld)):
