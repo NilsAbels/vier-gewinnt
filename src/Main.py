@@ -1,4 +1,5 @@
 from imp import reload
+from logging import raiseExceptions
 import numpy
 import re
 import pygame
@@ -11,26 +12,33 @@ BLACK = (0,0,0)
 RED = (255,0,0)
 YELLOW = (255,255,0)
 WHITE = (255, 255, 255)
+PINK = (255, 192, 203)
+
+ANZAHL_ZEILEN = 8
+ANZAHL_SPALTEN = 8
+QUADRAT = 80
 
 
 def Spielzug(spielfeld,spieler,spalte):
 
     if spielfeld[0][spalte] != 0: #falls Spalte bereits gefüllt ist
-        print("zug nicht möglich")
+        e = BaseException("Spalte voll")
+        raise e
 
-    for i in range(0, len(spielfeld)):
-        if i == len(spielfeld) - 1: #Überprüfung, ob unterste Zeile
-            spielfeld[i][spalte] = spieler
-            print(spielfeld)
-            if CheckGewinnervert(spieler, spielfeld, spalte) or CheckGewinnerhorizontal(spieler,spielfeld,i) or CheckGewinnerDiagonal(spieler,spielfeld,i,spalte): #Überprüfung, ob Gewinnbedingung erfüllt
-                return True
-            break
-        elif spielfeld[i+1][spalte] != 0: #Spalte wird nach unten durchiteriert, Überprüfung ob nächstes Feld besetzt 
-            spielfeld[i][spalte] = spieler
-            print(spielfeld)
-            if CheckGewinnervert(spieler, spielfeld, spalte) or CheckGewinnerhorizontal(spieler,spielfeld,i) or CheckGewinnerDiagonal(spieler,spielfeld,i,spalte):
-                return True
-            break
+    else:
+        for i in range(0, len(spielfeld)):
+            if i == len(spielfeld) - 1: #Überprüfung, ob unterste Zeile
+                spielfeld[i][spalte] = spieler
+                print(spielfeld)
+                if CheckGewinnervert(spieler, spielfeld, spalte) or CheckGewinnerhorizontal(spieler,spielfeld,i) or CheckGewinnerDiagonal(spieler,spielfeld,i,spalte): #Überprüfung, ob Gewinnbedingung erfüllt
+                    return True
+                break
+            elif spielfeld[i+1][spalte] != 0: #Spalte wird nach unten durchiteriert, Überprüfung ob nächstes Feld besetzt 
+                spielfeld[i][spalte] = spieler
+                print(spielfeld)
+                if CheckGewinnervert(spieler, spielfeld, spalte) or CheckGewinnerhorizontal(spieler,spielfeld,i) or CheckGewinnerDiagonal(spieler,spielfeld,i,spalte):
+                    return True
+                break
 
 
 def CheckGewinnervert(spieler, spielfeld, spalte):
@@ -105,34 +113,32 @@ def CheckGewinnerDiagonal(spieler,spielfeld,zeile,spalte):
 def draw_spielfeld(spielfeld): #Aufbau des Spielfelds
 	for s in range(len(spielfeld)):
 		for z in range(len(spielfeld[0])):
-			pygame.draw.rect(screen, BLUE, (s*quadrat, z*quadrat+quadrat, quadrat, quadrat)) #Rechtecke, oben eine Zeile frei
-			pygame.draw.circle(screen, BLACK, (int(s*quadrat+quadrat/2), int(z*quadrat+quadrat+quadrat/2)), radius) #Kreise in den Rechtecken
+			pygame.draw.rect(screen, PINK, (s*QUADRAT, z*QUADRAT+QUADRAT, QUADRAT, QUADRAT)) #Rechtecke, oben eine Zeile frei
+			pygame.draw.circle(screen, BLACK, (int(s*QUADRAT+QUADRAT/2), int(z*QUADRAT+QUADRAT+QUADRAT/2)), radius) #Kreise in den Rechtecken
 	
 	for s in range(len(spielfeld)): #Chips der 2 Spieler
 		for z in range(len(spielfeld[0])):		
 			if spielfeld[z][s] == 1:
-				pygame.draw.circle(screen, RED, (int(s*quadrat+quadrat/2), int(z*quadrat+quadrat/2)), radius) #Spieler 1: Roter Chip
+				pygame.draw.circle(screen, RED, (int(s*QUADRAT+QUADRAT/2), int((z+1)*QUADRAT+QUADRAT/2)), radius) #Spieler 1: Roter Chip
 			elif spielfeld[z][s] == 2: 
-				pygame.draw.circle(screen, YELLOW, (int(s*quadrat+quadrat/2), int(z*quadrat+quadrat/2)), radius) #Spieler 2: Gelber Chip
+				pygame.draw.circle(screen, BLUE, (int(s*QUADRAT+QUADRAT/2), int((z+1)*QUADRAT+QUADRAT/2)), radius) #Spieler 2: Gelber Chip
 	pygame.display.update()
 
 
-spielfeld = numpy.zeros((8,8))  #Spielfeld[zeile][spalte]
+spielfeld = numpy.zeros((ANZAHL_ZEILEN,ANZAHL_SPALTEN))  #Spielfeld[zeile][spalte]
 
 pygame.init()
 
 print(spielfeld)
 
-#Definition der Maße für GUI
-quadrat = 100
-radius = int(quadrat/2 - 4)
+#Berechnung der Maße für GUI
+radius = int(QUADRAT/2 - 4)
 
-breite = len(spielfeld) * quadrat
-hoehe = len(spielfeld[0] + 1) * quadrat
+breite = len(spielfeld) * QUADRAT
+hoehe = (len(spielfeld[0]) + 1) * QUADRAT
 size = (breite, hoehe)
 
-fonttype = pygame.font.SysFont("Bauhaus 93", 40) #Schriftart der Texte
-
+fonttype = pygame.font.SysFont("Bauhaus 93", int (QUADRAT*0.4)) #Schriftart der Text
 currspieler = 1
 ende = False
 
@@ -149,81 +155,75 @@ while True:
 
         if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE: #Neustart des Spiels bei Taste SPACE
-                    spielfeld = numpy.zeros((8,8))
+                    spielfeld = numpy.zeros((ANZAHL_ZEILEN,ANZAHL_SPALTEN))
 
         if event.type == pygame.MOUSEMOTION: #Wenn Maus sich bewegt
-            pygame.draw.rect(screen, BLACK, (0,0, breite, quadrat)) #Schwarzer Block in oberster Zeile, damit Spur nicht bleibt
+            pygame.draw.rect(screen, BLACK, (0,0, breite, QUADRAT)) #Schwarzer Block in oberster Zeile, damit Spur nicht bleibt
             xpos = event.pos[0] #Scannen der X-Achsen-Position des Mauszeigers (Zwischen 0 und 799)
             if currspieler == 1:
-                pygame.draw.circle(screen, RED, (xpos, int(quadrat/2)), radius) #Anzeige des Chips in oberster Spalte
+                pygame.draw.circle(screen, RED, (xpos, int(QUADRAT/2)), radius) #Anzeige des Chips in oberster Spalte
             else:
-                pygame.draw.circle(screen, YELLOW, (xpos, int(quadrat/2)), radius)
+                pygame.draw.circle(screen, BLUE, (xpos, int(QUADRAT/2)), radius)
             pygame.display.update()
             
         if event.type == pygame.MOUSEBUTTONDOWN: #Wenn Maus geklickt
-            pygame.draw.rect(screen, BLACK, (0,0, breite, quadrat))
+            pygame.draw.rect(screen, BLACK, (0,0, breite, QUADRAT))
             
             if currspieler == 1:
                 print("Rot ist an der Reihe") 
-                #eingabe = input("Spalte: ")   
-                #spalte = int(eingabe)-1
                 xpos = event.pos[0]
-                spalte = int(math.floor(xpos/quadrat)) #Teilen der X-Achsen-Position durch die Breite eines Quadrats (x/100) -> Erkennen welche Spalte
+                spalte = int(math.floor(xpos/QUADRAT)) #Teilen der X-Achsen-Position durch die Breite eines Quadrats (x/100) -> Erkennen welche Spalte
 
             if currspieler == 2:
-                print(" Gelb ist an der Reihe")
-                #eingabe = input("Spalte: ")  
-                #spalte = int(eingabe)-1   
+                print(" Blau ist an der Reihe") 
                 xpos = event.pos[0]
-                spalte = int(math.floor(xpos/quadrat))       
+                spalte = int(math.floor(xpos/QUADRAT))       
 
-            #if re.findall(r'[1-8]',eingabe): #RegEx Überprüfung, ob Eingabe zwischen 1 und 8. Wenn nicht, erneute Abfrage
-            #    pass
-            #else:
-            #    print('Bitte gültige Spalte eingeben)
-            #    continue
-
-            if Spielzug(spielfeld,currspieler,spalte): #Wenn Spielzug = True, steht ein Gewinner fest, sonst läuft Spielzug Methode durch
-                
-                if currspieler == 1:
-                    print("Rot hat gewonnen")
-                    draw_spielfeld(spielfeld)
-                    label = fonttype.render("SPIELER 1 HAT GEWONNEN!!!", 1, RED) #Ausgabe der Gewinn-Message
-                    screen.blit(label, (170,25))
-                    pygame.display.update()
-                    pygame.time.wait(3000)
+            try:
+                if Spielzug(spielfeld,currspieler,spalte): #Wenn Spielzug = True, steht ein Gewinner fest, sonst läuft Spielzug Methode durch
                     
-                elif currspieler == 2:
-                    print("Gelb hat gewonnen")
-                    draw_spielfeld(spielfeld)
-                    label = fonttype.render("SPIELER 2 HAT GEWONNEN!!!", 1, YELLOW)
-                    screen.blit(label, (170,25))
-                    pygame.display.update()
-                    pygame.time.wait(3000)
- 
-                ende = True
+                    if currspieler == 1:
+                        print("Rot hat gewonnen")
+                        draw_spielfeld(spielfeld)
+                        label = fonttype.render("SPIELER 1 HAT GEWONNEN!!!", 1, RED) #Ausgabe der Gewinn-Message
+                        screen.blit(label, ((QUADRAT*1.7),QUADRAT/4))
+                        pygame.display.update()
+                        pygame.time.wait(3000)
+                        
+                    elif currspieler == 2:
+                        print("Gelb hat gewonnen")
+                        draw_spielfeld(spielfeld)
+                        label = fonttype.render("SPIELER 2 HAT GEWONNEN!!!", 1, BLUE)
+                        screen.blit(label, (170,25))
+                        pygame.display.update()
+                        pygame.time.wait(3000)
+    
+                    ende = True
 
-            else: #Wechsel der Spieler
-                if currspieler == 1:
-                    currspieler = 2
-                else:
-                    currspieler = 1
+                else: #Wechsel der Spieler
+                    if currspieler == 1:
+                        currspieler = 2
+                    else:
+                        currspieler = 1
+            except:
+                 print("zug nicht möglich")
+
 
         draw_spielfeld(spielfeld)
 
         if ende == True:
-            pygame.draw.rect(screen, BLACK, (0,0, breite, quadrat))
-            label = fonttype.render("NOCHMAL? -> SPACE   ENDE? -> BACKSPACE", 1, WHITE)
-            screen.blit(label, (20,25))
+            pygame.draw.rect(screen, BLACK, (0,0, breite, QUADRAT))
+            label = fonttype.render("NOCHMAL? -> SPACE   ENDE? -> X", 1, WHITE)
+            screen.blit(label, (QUADRAT*1.25,QUADRAT/4))
             pygame.display.update()
             pygame.event.wait()
 
             if event.type == pygame.KEYDOWN: #Neustart bei Taste SPACE
                 if event.key == pygame.K_SPACE:
-                    spielfeld = numpy.zeros((8,8))
+                    spielfeld = numpy.zeros((ANZAHL_ZEILEN,ANZAHL_SPALTEN))
                     ende = False
 
-                if event.key == pygame.K_BACKSPACE: #Schließen bei Taste BACKSPACE                    
+                if event.key == pygame.K_x: #Schließen bei Taste x                  
                     sys.exit()  
                          
                 
