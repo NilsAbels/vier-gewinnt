@@ -265,18 +265,19 @@ def Menu():
 
                 screen.fill((0, 0, 50))
 
+                StartRec = draw_text("4 GEWINNT", fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.2,   displayInfo.current_h * 0.04)
 
-                draw_text('Spieler 1 Name:', fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.05, displayInfo.current_h * 0.05)
-                Spieler1Rec  = draw_text(Spieler1Text, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.05)
+                draw_text('Spieler 1 Name:', fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.05, displayInfo.current_h * 0.12)
+                Spieler1Rec  = draw_text(Spieler1Text, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.12)
 
-                draw_text('Spieler 2 Name:', fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.05, displayInfo.current_h * 0.12)
-                Spieler2Rec = draw_text(Spieler2Text, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.12)
+                draw_text('Spieler 2 Name:', fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.05, displayInfo.current_h * 0.19)
+                Spieler2Rec = draw_text(Spieler2Text, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.19)
 
-                draw_text('Anzahl Spalten / Zeilen:', fonttype, (255, 255, 255), screen,displayInfo.current_w * 0.05, displayInfo.current_h * 0.19)
-                SpaltenZeilenRec = draw_text(SpaltenZeilenText, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.19)
+                draw_text('Anzahl Spalten / Zeilen:', fonttype, (255, 255, 255), screen,displayInfo.current_w * 0.05, displayInfo.current_h * 0.26)
+                SpaltenZeilenRec = draw_text(SpaltenZeilenText, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.26)
 
 
-                StartRec = draw_text("Spiel starten", fonttype, (255, 255, 255), screen,  displayInfo.current_w * 0.3, displayInfo.current_h * 0.40)
+                StartRec = draw_text("Spiel starten", fonttype, (255, 255, 255), screen,  displayInfo.current_w * 0.2, displayInfo.current_h * 0.40)
                 # Rechteck um Spiel Starten Button passend zu Größe und Postion des Start Buttons
                 pygame.draw.rect(screen,WHITE, pygame.Rect(StartRec.topleft[0]-10,StartRec.topleft[1]-10 , StartRec.topright[0] - StartRec.topleft[0] + 20, StartRec.bottomright[1] - StartRec.topright[1] + 20), 2)
 
