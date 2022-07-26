@@ -141,9 +141,10 @@ def Game(Spieler1, Spieler2, ANZAHL_SPALTEN_ZEILEN):
         hoehe = (len(spielfeld[0]) + 1) * QUADRAT
         size = (breite, hoehe)
 
-        fonttype = pygame.font.SysFont("Bauhaus 93", int (QUADRAT*0.4)) #Schriftart der Text
+        fonttype = pygame.font.SysFont("Bauhaus 93", int (QUADRAT*0.2)) #Schriftart der Text
         currspieler = 1
         ende = False
+        ZugZähler = 0
 
         #Anzeigen des Spielfelds
         screen = pygame.display.set_mode(size)
@@ -158,6 +159,7 @@ def Game(Spieler1, Spieler2, ANZAHL_SPALTEN_ZEILEN):
 
                 if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE: #Neustart des Spiels bei Taste SPACE
+                            ZugZähler = 0
                             spielfeld = numpy.zeros((ANZAHL_SPALTEN_ZEILEN,ANZAHL_SPALTEN_ZEILEN))
 
                 if event.type == pygame.MOUSEMOTION: #Wenn Maus sich bewegt
@@ -173,12 +175,10 @@ def Game(Spieler1, Spieler2, ANZAHL_SPALTEN_ZEILEN):
                     pygame.draw.rect(screen, BLACK, (0,0, breite, QUADRAT))
 
                     if currspieler == 1:
-                        print("Rot ist an der Reihe")
                         xpos = event.pos[0]
                         spalte = int(math.floor(xpos/QUADRAT)) #Teilen der X-Achsen-Position durch die Breite eines Quadrats (x/100) -> Erkennen welche Spalte
 
                     if currspieler == 2:
-                        print(" Blau ist an der Reihe")
                         xpos = event.pos[0]
                         spalte = int(math.floor(xpos/QUADRAT))
 
@@ -202,6 +202,13 @@ def Game(Spieler1, Spieler2, ANZAHL_SPALTEN_ZEILEN):
                             ende = True
 
                         else: #Wechsel der Spieler
+                            ZugZähler +=1
+                            if ZugZähler == ANZAHL_SPALTEN_ZEILEN * ANZAHL_SPALTEN_ZEILEN:  # Falls alle Felder belegt sind ohne Sieger
+                                label = fonttype.render("Unentschieden, Nochmal? -> SPACE", 1, RED)
+                                screen.blit(label, (20, 25))
+                                pygame.display.update()
+                                pygame.time.wait(3000)
+                            print(ZugZähler)
                             if currspieler == 1:
                                 currspieler = 2
                             else:
@@ -221,7 +228,7 @@ def Game(Spieler1, Spieler2, ANZAHL_SPALTEN_ZEILEN):
 
                     if event.type == pygame.KEYDOWN: #Neustart bei Taste SPACE
                         if event.key == pygame.K_SPACE:
-                            spielfeld = numpy.zeros((ANZAHL_ZEILEN,ANZAHL_SPALTEN))
+                            spielfeld = numpy.zeros((ANZAHL_SPALTEN_ZEILEN,ANZAHL_SPALTEN_ZEILEN))
                             ende = False
 
                         if event.key == pygame.K_x: #Schließen bei Taste x
@@ -235,7 +242,7 @@ def Menu():
     pygame.init()
     displayInfo = pygame.display.Info()
     screen = pygame.display.set_mode((displayInfo.current_w /2, displayInfo.current_h / 2))
-    pygame.display.set_caption("Menu")
+    pygame.display.set_caption("4 gewinnt")
     fonttype = pygame.font.SysFont("Bauhaus 93", int(QUADRAT * 0.4))
 
     def draw_text(text, font, color, surface, x, y):
@@ -243,7 +250,7 @@ def Menu():
         textrect = textobj.get_rect()
         textrect.topleft = (x, y)
         surface.blit(textobj, textrect)
-        return textobj,textrect
+        return textrect
 
 
 
@@ -256,20 +263,20 @@ def Menu():
             aktuelleAuswahl = ""
             while Menuactive:
 
-                screen.fill((0, 0, 0))
+                screen.fill((0, 0, 50))
 
 
                 draw_text('Spieler 1 Name:', fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.05, displayInfo.current_h * 0.05)
-                Spieler1Name, Spieler1Rec  = draw_text(Spieler1Text, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.05)
+                Spieler1Rec  = draw_text(Spieler1Text, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.05)
 
                 draw_text('Spieler 2 Name:', fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.05, displayInfo.current_h * 0.12)
-                Spieler2Name, Spieler2Rec = draw_text(Spieler2Text, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.12)
+                Spieler2Rec = draw_text(Spieler2Text, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.12)
 
                 draw_text('Anzahl Spalten / Zeilen:', fonttype, (255, 255, 255), screen,displayInfo.current_w * 0.05, displayInfo.current_h * 0.19)
-                SpaltenZeilenNr, SpaltenZeilenRec = draw_text(SpaltenZeilenText, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.19)
+                SpaltenZeilenRec = draw_text(SpaltenZeilenText, fonttype, (255, 255, 255), screen, displayInfo.current_w * 0.3, displayInfo.current_h * 0.19)
 
 
-                StartText,StartRec = draw_text("Spiel starten", fonttype, (255, 255, 255), screen,  displayInfo.current_w * 0.3, displayInfo.current_h * 0.40)
+                StartRec = draw_text("Spiel starten", fonttype, (255, 255, 255), screen,  displayInfo.current_w * 0.3, displayInfo.current_h * 0.40)
                 # Rechteck um Spiel Starten Button passend zu Größe und Postion des Start Buttons
                 pygame.draw.rect(screen,WHITE, pygame.Rect(StartRec.topleft[0]-10,StartRec.topleft[1]-10 , StartRec.topright[0] - StartRec.topleft[0] + 20, StartRec.bottomright[1] - StartRec.topright[1] + 20), 2)
 
@@ -277,7 +284,7 @@ def Menu():
 
 
 
-
+                #blinkender Cursor bei ausgewähltem Text
                 if time.time() % 1 > 0.5 and aktuelleAuswahl == "Spieler1":
                     cursor = pygame.Rect(Spieler1Rec.topright, (3, Spieler1Rec.height))
                     cursor.topleft = Spieler1Rec.topright
@@ -317,8 +324,7 @@ def Menu():
 
                 if StartRec.collidepoint(mx,my):
                     if buttonPressed:
-                        print(SpaltenZeilenText)
-                        if SpaltenZeilenText.isnumeric():
+                        if SpaltenZeilenText.isnumeric(): #Überprüfung ob Eingabe korrekt ist
                             Game(Spieler1Text,Spieler2Text,int(SpaltenZeilenText))
                         else:
                             print("Eingabe ist ungültig")
@@ -328,19 +334,17 @@ def Menu():
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         pygame.quit()
-                        sys.exit()
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_ESCAPE:
                             pygame.quit()
-                            sys.exit()
-                        if event.key == pygame.K_BACKSPACE:
+                        if event.key == pygame.K_BACKSPACE: #eingegebenen Text in ausgewählten Fenster löschen
                             if aktuelleAuswahl =="Spieler1" and len(Spieler1Text) > 0:
                                 Spieler1Text = Spieler1Text[:-1]
                             if aktuelleAuswahl =="Spieler2" and len(Spieler2Text) > 0:
                                 Spieler2Text =Spieler2Text[:-1]
                             if aktuelleAuswahl =="Spalten/Zeilen" and len(SpaltenZeilenText) > 0:
                                 SpaltenZeilenText = SpaltenZeilenText[:-1]
-                        else:
+                        else: # Eingabe der Namen und Anzahl der Spalten/Zeilen
                             if aktuelleAuswahl == "Spieler1":
                                  Spieler1Text += event.unicode
                             if aktuelleAuswahl == "Spieler2":
