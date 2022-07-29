@@ -2,7 +2,6 @@ import time
 from imp import reload
 from logging import raiseExceptions
 import numpy
-import re
 import pygame
 import sys
 import math
@@ -16,12 +15,9 @@ YELLOW = (255,255,0)
 WHITE = (255, 255, 255)
 PINK = (255, 192, 203)
 
-
 QUADRAT = 80
 
-
-
-def Game(Spieler1, Spieler2, ANZAHL_SPALTEN_ZEILEN):
+def Game(Spieler1, Spieler2, ANZAHL_SPALTEN_ZEILEN): #Game Funktion Anfang
         def Spielzug(spielfeld,spieler,spalte):
 
             if spielfeld[0][spalte] != 0: #falls Spalte bereits gefüllt ist
@@ -141,7 +137,7 @@ def Game(Spieler1, Spieler2, ANZAHL_SPALTEN_ZEILEN):
         hoehe = (len(spielfeld[0]) + 1) * QUADRAT
         size = (breite, hoehe)
 
-        fonttype = pygame.font.SysFont("Bauhaus 93", int (QUADRAT*0.2)) #Schriftart der Text
+        fonttype = pygame.font.SysFont("Bauhaus 93", int (QUADRAT*0.4)) #Schriftart der Textfelder
         currspieler = 1
         ende = False
         ZugZähler = 0
@@ -236,8 +232,7 @@ def Game(Spieler1, Spieler2, ANZAHL_SPALTEN_ZEILEN):
                          
 
 
-
-def Menu():
+def Menu(): #Menu Funktion Anfang
 
     pygame.init()
     displayInfo = pygame.display.Info()
@@ -282,9 +277,6 @@ def Menu():
                 pygame.draw.rect(screen,WHITE, pygame.Rect(StartRec.topleft[0]-10,StartRec.topleft[1]-10 , StartRec.topright[0] - StartRec.topleft[0] + 20, StartRec.bottomright[1] - StartRec.topright[1] + 20), 2)
 
 
-
-
-
                 #blinkender Cursor bei ausgewähltem Text
                 if time.time() % 1 > 0.5 and aktuelleAuswahl == "Spieler1":
                     cursor = pygame.Rect(Spieler1Rec.topright, (3, Spieler1Rec.height))
@@ -301,10 +293,7 @@ def Menu():
                     cursor.topleft = SpaltenZeilenRec.topright
                     pygame.draw.rect(screen, WHITE, cursor)
 
-
-
                 mx, my = pygame.mouse.get_pos()
-
 
                 if Spieler1Rec.collidepoint(mx,my):
                     if buttonPressed:
@@ -320,7 +309,6 @@ def Menu():
                     if buttonPressed:
                         SpaltenZeilenText = ""
                         aktuelleAuswahl = "Spalten/Zeilen"
-
 
 
                 if StartRec.collidepoint(mx,my):
@@ -358,11 +346,6 @@ def Menu():
 
                 pygame.display.update()
 
-
     main_menu()
-
-        
- 
-
 
 Menu()
